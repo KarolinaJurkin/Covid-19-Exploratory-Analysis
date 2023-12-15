@@ -7,7 +7,7 @@ FROM
 WHERE
 	continent IS NOT NULL 
 	AND location NOT LIKE '%income%'
-	AND location NOT IN ('World', 'European Union', 'South Africa') -- Ensures only countries are selected in Location field
+	AND location NOT IN ('World', 'European Union') -- Ensures only countries are selected in Location field
 ORDER BY 
 	1, 2
 
@@ -22,7 +22,7 @@ FROM
 WHERE 
 	continent IS NOT NULL 
 	AND location NOT LIKE '%income%'
-	AND location NOT IN ('World', 'European Union', 'South Africa')
+	AND location NOT IN ('World', 'European Union')
 ORDER BY 
 	1, 2
 
@@ -38,7 +38,7 @@ FROM
 WHERE 
 	continent IS NOT NULL 
 	AND location NOT LIKE '%income%'
-	AND location NOT IN ('World', 'European Union', 'South Africa')
+	AND location NOT IN ('World', 'European Union')
 ORDER BY 
 	1, 2
 
@@ -53,7 +53,7 @@ FROM
 WHERE	
 	continent IS NOT NULL 
 	AND location NOT LIKE '%income%'
-	AND location NOT IN ('World', 'European Union', 'South Africa')
+	AND location NOT IN ('World', 'European Union')
 GROUP BY 
 	location, population
 ORDER BY 
@@ -69,7 +69,7 @@ FROM
 WHERE
 	continent IS NOT NULL 
 	AND location NOT LIKE '%income%'
-	AND location NOT IN ('World', 'European Union', 'South Africa') 
+	AND location NOT IN ('World', 'European Union') 
 GROUP BY 
 	location, population
 ORDER BY 
@@ -117,7 +117,7 @@ FROM
 	CovidDeaths
 WHERE
 	continent IS NOT NULL 
-	AND location NOT IN ('World', 'European Union', 'South Africa')
+	AND location NOT IN ('World', 'European Union')
 	AND location NOT LIKE '%income%'
 GROUP BY 
 	date
@@ -160,7 +160,7 @@ FROM
 	AND dea.date = vac.date
 WHERE
 	dea.continent IS NOT NULL  
-	AND dea.location NOT IN ('World', 'European Union', 'South Africa')
+	AND dea.location NOT IN ('World', 'European Union')
 	AND dea.location NOT LIKE '%income%'
 ORDER BY 
 	2, 3
@@ -180,7 +180,7 @@ FROM
 	AND dea.date = vac.date
 WHERE
 	dea.continent IS NOT NULL 
-	AND dea.location NOT IN ('World', 'European Union', 'South Africa')
+	AND dea.location NOT IN ('World', 'European Union')
 	AND dea.location NOT LIKE '%income%'
 
 -- Shows Summary of Vaccinations vs CRF and CMR
@@ -197,13 +197,26 @@ FROM
 	AND dea.date = vac.date
 WHERE
 	dea.continent IS NOT NULL 
-	AND dea.location NOT IN ('World', 'European Union', 'South Africa')
+	AND dea.location NOT IN ('World', 'European Union')
 	AND dea.location NOT LIKE '%income%'
 	AND dea.total_cases IS NOT NULL
 GROUP BY
 	dea.location, dea.population
 ORDER BY
 	3 DESC
+
+-- World's Infection Rate by date
+	
+SELECT
+	Date, MAX((total_cases/population)*100) Infection_Rate
+FROM 
+	CovidDeaths 
+WHERE
+	location = 'World'
+GROUP BY 
+	date, population
+ORDER BY 
+	1
 
 -- Tests per Capita vs New Cases per Capita 
 -- Creating CTE to look at a rate of positive tests
@@ -221,7 +234,7 @@ FROM
 	AND dea.date = vac.date
 WHERE
 	dea.continent IS NOT NULL 
-	AND dea.location NOT IN ('World', 'European Union', 'South Africa')
+	AND dea.location NOT IN ('World', 'European Union')
 	AND dea.location NOT LIKE '%income%'
 	AND dea.total_cases IS NOT NULL
 GROUP BY
@@ -235,8 +248,24 @@ FROM
 ORDER BY
 	3 DESC
 
--- Creating Views for later visualizations
+-- CFR in the world by date 
 
+SELECT
+	Date, total_cases, total_deaths, population,
+	CASE
+		WHEN 
+		total_cases = 0 THEN 0
+		ELSE
+		(total_deaths/total_cases)*100 END AS Case_Fatality_Rate
+FROM
+	CovidDeaths
+WHERE
+	location = 'World'
+ORDER BY 
+	1
+
+	
+-- Creating Views for later visualizations
 -- 1. Infection Rate in different countries
 
 CREATE VIEW CountriesInfectionRate AS
@@ -249,7 +278,7 @@ FROM
 WHERE	
 	continent IS NOT NULL 
 	AND location NOT LIKE '%income%'
-	AND location NOT IN ('World', 'European Union', 'South Africa')
+	AND location NOT IN ('World', 'European Union')
 GROUP BY 
 	location, population
 
@@ -258,7 +287,7 @@ GROUP BY
 
 CREATE VIEW SummaryVaccinationsvsPopulation AS
 SELECT 
-	dea.Location, dea.Population, 
+	dea.Location, dea.Continent, dea.Population, 
 	MAX(cast (vac.people_vaccinated as int)/population)*100 Percentage_of_Population_Vaccinated,
 	(SUM(dea.new_deaths)/SUM(dea.new_cases))*100 Case_Fatality_Rate,
 	SUM(dea.new_deaths/population)*100 Crude_Mortality_Rate
@@ -269,21 +298,22 @@ FROM
 	AND dea.date = vac.date
 WHERE
 	dea.continent IS NOT NULL 
-	AND dea.location NOT IN ('World', 'European Union', 'South Africa')
+	AND dea.location NOT IN ('World', 'European Union')
 	AND dea.location NOT LIKE '%income%'
 	AND dea.total_cases IS NOT NULL
 GROUP BY
-	dea.location, dea.population
+	dea.location, dea.population, dea.continent
 
---3. Tests per Capita vs New Cases per Capita in different countries
+--3. Tests per Capita, New Cases per Capita and Total Deaths in different countries
 
 CREATE VIEW TestsvsCases AS
 WITH TestsvCases AS
 (
 SELECT 
-	dea.Location, dea.Population, 
+	dea.iso_code, dea.Location, dea.Continent, dea.Population, 
 	MAX(cast (vac.total_tests as float)/dea.population) Tests_per_Capita,
-	SUM((dea.new_cases)/dea.population) New_Cases_per_Capita
+	SUM((dea.new_cases)/dea.population) New_Cases_per_Capita,
+	MAX(dea.total_deaths) Total_Deaths
 FROM 
 	CovidDeaths dea
 	JOIN CovidVaccinations vac
@@ -291,14 +321,48 @@ FROM
 	AND dea.date = vac.date
 WHERE
 	dea.continent IS NOT NULL 
-	AND dea.location NOT IN ('World', 'European Union', 'South Africa')
+	AND dea.location NOT IN ('World', 'European Union')
 	AND dea.location NOT LIKE '%income%'
 	AND dea.total_cases IS NOT NULL
 GROUP BY
-	dea.location, dea.population
+	dea.iso_code, dea.location, dea.population, dea.continent
 )
 SELECT 
 	*,
 	(New_Cases_per_Capita/Tests_per_Capita)*100 Percentage_of_Positive_Tests
 FROM 
 	TestsvCases
+
+-- 4. Total numbers in the world 
+
+CREATE VIEW WorldNumbers AS
+SELECT 
+	Location,
+	MAX(Total_Cases) Total_Cases,
+	MAX(Total_Deaths) Total_Deaths,
+	(MAX(Total_Cases)/Population)*100 Average_Infection_Rate
+FROM 
+	CovidDeaths
+WHERE
+	Location = 'World'
+GROUP BY 
+	Location, population
+
+-- 5. CFR in the world by date
+
+CREATE VIEW CFRworld AS
+SELECT
+	Date, total_cases, total_deaths, population,
+	MAX((total_cases/population)*100) Infection_Rate,
+	CASE
+		WHEN 
+		total_cases = 0 THEN 0
+		ELSE
+		(total_deaths/total_cases)*100 END AS Case_Fatality_Rate
+FROM
+	CovidDeaths
+WHERE
+	location = 'World'
+GROUP BY 
+	Date, total_cases, total_deaths, population
+
