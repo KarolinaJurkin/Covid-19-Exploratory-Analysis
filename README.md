@@ -2,7 +2,7 @@
 
 ### Introduction
 
-In this analysis I'll be taking a closer look at Case Fatality Rate (CFT) versus Infection Rate and see how these metrics were changing over time. I also want to compare Total Deaths in different countries with Crude Mortality Rate (CMR) to see which countries were most affected by the pandemic.
+In this analysis I'll be taking a closer look at Case Fatality Rate (CFR) versus Infection Rate and see how these metrics were changing over time. I also want to compare Total Deaths in different countries with Crude Mortality Rate (CMR) to see which countries were most affected by the pandemic.
 As it is my first big project I decided to follow Alex Freberg's process [YouTube video](https://www.youtube.com/watch?v=qfyynHBFOsM&list=PLUaB-1hjhk8H48Pj32z4GZgGWyylqv85f&index=1&ab_channel=AlexTheAnalyst) and blend it with self-directed exploration and problem solving. Structured guidance provided me the foundation and allowed me to focus on deriving meaningful insights from the data. 
 
 ### Overview 
@@ -15,18 +15,20 @@ According to [Our World In Data]( https://ourworldindata.org/mortality-risk-covi
 
 **Crude Mortality Rate** is calculated by dividing number of deaths by total population. This metric is much more accurate in comparison to CFR, but it reflects different data and it will always be smaller, since number of diagnosed cases < total population (unless the whole population gets infected).
 
-Initially I also planned to analyze the statistics of Covid19 among different income groups as they were included in the dataset. Unfortunately after checking the source [World Bank income classification](https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups), the income groups are in fact certain regions without consideration of income differences within these regions, which makes the data insufficient. For that reason I decided not to perform Covid19 vs income analysis and not to include income records in the whole project. 
+Initially I also planned to analyze the statistics of Covid-19 among different income groups as they were included in the dataset. Unfortunately after checking the source [World Bank income classification](https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups), the income groups are in fact certain regions without consideration of income differences within these regions, which makes the data insufficient. For that reason I decided not to perform Covid-19 income analysis and not to include income records in the whole project. 
 
 ### Sources and tools used for this analysis
 
 - Data source: [Our World In Data](https://ourworldindata.org)
-- Preliminary cleaning and creating: Microsoft Excel
+- Preliminary cleaning: Microsoft Excel
 - Querying the data and creating Views: Microsoft SQL Server Management Studio
 - Visualization: Power BI
 
 ### Data visualization
 
 - **Case Fatality Rate vs Infection Rate**: line chart is the best choice to show both metrics. It's important to keep in mind that IR takes total cases and divides it by population. Taking into account sum of new cases would not be a good solution in this case as data was not always collected daily and there are discrepancies between actual cases and confirmed cases. Day to day data varies so much that such chart would not be informative in any way. For this reason it's important to know what to look for when reading this chart. If IR was stable we would observe a linear growth of this metric and what we see instead is exponential increase with some sudden growths. After 2023 IR becomes almost a flat line which shows that not many new cases were observed.
+  ![image](https://github.com/KarolinaJurkin/Covid-19-Exploratory-Analysis/assets/53952580/dcfd2b36-f545-4f8e-a1ad-f7e43d7f9198)
+
 
 - **World numbers (Total Cases, Total Deaths, Infection Rate)**: card visuals to show summaries.
 
