@@ -24,7 +24,7 @@ Initially I also planned to analyze the statistics of Covid19 among different in
 - Querying the data and creating Views: Microsoft SQL Server Management Studio
 - Visualization: Power BI
 
-  ### Data visualization
+### Data visualization
 
 - **Case Fatality Rate vs Infection Rate**: line chart is the best choice to show both metrics. It's important to keep in mind that IR takes total cases and divides it by population. Taking into account sum of new cases would not be a good solution in this case as data was not always collected daily and there are discrepancies between actual cases and confirmed cases. Day to day data varies so much that such chart would not be informative in any way. For this reason it's important to know what to look for when reading this chart. If IR was stable we would observe a linear growth of this metric and what we see instead is exponential increase with some sudden growths. After 2023 IR becomes almost a flat line which shows that not many new cases were observed.
 
