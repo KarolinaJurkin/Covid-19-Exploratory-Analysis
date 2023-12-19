@@ -2,7 +2,7 @@
 
 ### Introduction
 
-In this analysis I'll be taking a closer look at Case Fatality Rate (CFR) versus Infection Rate and see how these metrics were changing over time. I also want to compare Total Deaths in different countries with Crude Mortality Rate (CMR) to see which countries were most affected by the pandemic.
+In this analysis I'll be taking a closer look at Case Fatality Rate (CFR) versus Infection Rate and see how these metrics were changing over time. I also want to compare Total Deaths in different countries with Crude Mortality Rate (CRM) to see which countries were most affected by the pandemic.
 As it is my first big project I decided to follow Alex Freberg's process [YouTube video](https://www.youtube.com/watch?v=qfyynHBFOsM&list=PLUaB-1hjhk8H48Pj32z4GZgGWyylqv85f&index=1&ab_channel=AlexTheAnalyst) and blend it with self-directed exploration and problem solving. Structured guidance provided me the foundation and allowed me to focus on deriving meaningful insights from the data. 
 
 ### Overview 
@@ -26,6 +26,8 @@ Initially I also planned to analyze the statistics of Covid-19 among different i
 
 ### Data visualization
 
+[Covid-19 Dashboard](https://www.novypro.com/project/covid-19-data-analysis-2)
+
 - **Case Fatality Rate vs Infection Rate**: line chart is the best choice to show both metrics. It's important to keep in mind that IR takes total cases and divides it by population. Taking into account sum of new cases would not be a good solution in this case as data was not always collected daily and there are discrepancies between actual cases and confirmed cases. Day to day data varies so much that such chart would not be informative in any way. For this reason it's important to know what to look for when reading this chart. If IR was stable we would observe a linear growth of this metric and what we see instead is exponential increase with some sudden growths. After 2023 IR becomes almost a flat line which shows that not many new cases were observed.
   ![image](https://github.com/KarolinaJurkin/Covid-19-Exploratory-Analysis/assets/53952580/dcfd2b36-f545-4f8e-a1ad-f7e43d7f9198)
 
@@ -34,14 +36,14 @@ Initially I also planned to analyze the statistics of Covid-19 among different i
 
 - **Total Deaths and Crude Mortality Rate**: I chose bar charts as these metrics are shown by country. Charts are seperate as Total Deaths are absolute number and CRM is a percentage and combining them in a singular chart would be confusing. 
 
-- **Infection Rate by country**: I decided to include a world shape map showing the Infection Rate in different countries. The unexpected challenge I encountered was that Power BI doesn't have such a map built in and it required me to search for a specific topoJSON file. Once I customized and downloaded the map, I was able to create a custom world shape map visualization. 
+- **Infection Rate by country**: I decided to include a world shape map showing the Infection Rate in different countries. The unexpected challenge I encountered was that Power BI doesn't have such a map built in and it required me to search for a specific topoJSON file. Once I downloaded the map from [Natural Earth Data](https://www.naturalearthdata.com/downloads/) and customized it by removing Antarctica, I was able to create a custom world shape map visualization. 
 
 ### Insights
 
 - Infection Rate (IR) and Case Fatality Rate (CFR) are undeniably correlated. Whenever we see a rise in Infection Rate the deadliness goes down. A virus that kills its host quickly may not have a chance to spread further thus the mutations in time tend to increase IR.
 
-- Both IR and CFR changed drastically over time and most definitely one of the biggest factors causing it is the mutation and different variants of the virus. We can clearly see the change in metrics right after the Omicron variant started spreading at the end of 2021.
+- Both Infection Rate and Case Fatality Rate changed drastically over time and most definitely one of the biggest factors causing it is the mutation and different variants of the virus. We can clearly see the change in metrics right after the Omicron variant started spreading at the end of 2021.
 
-- Even though USA has the greatest absolute value of Total Deaths (over 1 million), its Crude Mortality Rate (CRM=0.33%) does not stand out and is comparable with most of the European countries. The data suggests that countries that were most affected by the pandemic are as follows: Peru (CRM=0.65%), Bulgaria (0.57%) and Bosnia and Herzegovina (0.51%).
+- Even though USA has the greatest absolute value of Total Deaths (over 1 million), its Crude Mortality Rate (CMR=0.33%) does not stand out and is comparable with most of the European countries. The data suggests that countries that were most affected by the pandemic are as follows: Peru (CMR=0.65%), Bulgaria (0.57%) and Bosnia and Herzegovina (0.51%).
 
-- As we look at the Infection Rate on the map, what really stands out is Africa that has really low values in comparison to the other parts of the world. Further analysis would be required to come to a conclusion why we can observe such trend.
+- As we look at Africa on the map, low values of Infection Rate really stand out in comparison to other parts of the world. Further analysis would be required to come to a conclusion why such trend occurs.
