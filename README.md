@@ -40,7 +40,7 @@ Initially I also planned to analyze the statistics of Covid-19 among different i
 
 ### Insights
 
-- Infection Rate (IR) and Case Fatality Rate (CFR) are undeniably correlated. Whenever we see a rise in Infection Rate the deadliness goes down. A virus that kills its host quickly may not have a chance to spread further thus the mutations in time tend to increase IR.
+- Infection Rate (IR) and Case Fatality Rate (CFR) are undeniably correlated. Whenever we see a rise in Infection Rate the deadliness goes down. A virus that kills its host quickly may not have a chance to spread further thus the mutations in time tend to decrease CFR.
 
 - Both Infection Rate and Case Fatality Rate changed drastically over time and most definitely one of the biggest factors causing it is the mutation and different variants of the virus. We can clearly see the change in metrics right after the Omicron variant started spreading at the end of 2021.
 
